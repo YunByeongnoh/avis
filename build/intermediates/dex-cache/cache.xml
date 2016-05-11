@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/user/AndroidStudioProjects/B.nuts/app/libs/thermodosdk-1.0.18.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="04a3e01bbde71406233b43cee930f979ea44039e">
+        <dex dex="/Users/user/AndroidStudioProjects/B.nuts/app/build/intermediates/pre-dexed/debug/thermodosdk-1.0.18-fe793e8801b1c4b4349166b81c9cae254ca9f62d.jar" />
+    </item>
+    <item
+        jar="/Users/user/AndroidStudioProjects/B.nuts/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/user/AndroidStudioProjects/B.nuts/app/build/intermediates/pre-dexed/debug/classes-140ea62c7b2861e50ca99489384afad20bc0bba1.jar" />
+    </item>
+    <item
+        jar="/Users/user/AndroidStudioProjects/B.nuts/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/user/AndroidStudioProjects/B.nuts/app/build/intermediates/pre-dexed/debug/classes-73e7b77442df142bfea23d56406b48547e4954ad.jar" />
+    </item>
+    <item
+        jar="/Users/user/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/Users/user/AndroidStudioProjects/B.nuts/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-fd128a8bc60722ca18875b3d9d361b4bbbbfddce.jar" />
+    </item>
+    <item
+        jar="/Users/user/AndroidStudioProjects/B.nuts/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/jars/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/Users/user/AndroidStudioProjects/B.nuts/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-04afcbfb3ef88fcce11b9183d5dff4225d94eac3.jar" />
+    </item>
+    <item
+        jar="/Users/user/AndroidStudioProjects/B.nuts/app/libs/achartengine-1.1.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9932e3fb9fbe54e80873e77f72a99f79e33b3250">
+        <dex dex="/Users/user/AndroidStudioProjects/B.nuts/app/build/intermediates/pre-dexed/debug/achartengine-1.1.0-19976b46092d1cd74c0b2d17416d9a2e7beea53d.jar" />
+    </item>
+
+</items>

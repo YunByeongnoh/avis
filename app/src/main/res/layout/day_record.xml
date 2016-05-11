@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <TableLayout
+        android:orientation="vertical"
+        android:layout_width="298dp"
+        android:layout_height="499dp"
+        android:layout_gravity="center_vertical">
+
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/editText"
+                android:text="생리일" />
+            <RadioGroup
+                android:layout_column="5"
+                android:id="@+id/radiogroup">
+            <RadioButton
+                android:layout_margin="0sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/시작"
+                android:id="@+id/menstart"
+                android:layout_span="11" />
+
+            <RadioButton
+                android:layout_margin="0sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/끝"
+                android:id="@+id/menend" />
+            </RadioGroup>
+        </TableRow>
+
+
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/editText3"
+                android:text="사랑일(피임o)"
+                android:layout_weight="0.20"
+                android:layout_gravity="center_horizontal" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/checkBoxMenSex"
+                android:layout_column="5" />
+
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/editText4"
+                android:text="사랑일(피임x)"
+                android:layout_weight="0.20"
+                android:layout_gravity="center_horizontal" />
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/checkBoxMenNonSex"
+                android:layout_column="5" />
+
+        </TableRow>
+
+
+
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/editText7"
+                android:text="체중"
+                android:layout_weight="0.20"
+                android:layout_gravity="center_horizontal" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:hint="체중"
+                android:id="@+id/EditTextWeight"
+                android:layout_weight="1"
+                android:layout_column="5"
+                android:layout_gravity="center_horizontal"/>
+        </TableRow>
+
+
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:text="체온"
+                android:layout_weight="0.20"
+                android:layout_gravity="center_horizontal" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:id="@+id/EditTexttemperature"
+                android:hint="체온"
+                android:layout_weight="0.2"
+                android:layout_gravity="center_horizontal" />
+        </TableRow>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="확인"
+            android:id="@+id/saveButton"
+            android:layout_marginLeft="247dp"
+            android:layout_marginStart="247dp" />
+    </TableLayout>
+
+
+
+</RelativeLayout>

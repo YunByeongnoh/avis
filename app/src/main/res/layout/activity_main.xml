@@ -1,0 +1,119 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@android:id/tabhost"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@android:color/white">
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/main_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+                    <ImageView
+                        android:id="@+id/main_image"
+                        android:layout_width="180sp"
+                        android:layout_height="180sp"
+                        android:src="@drawable/avis"
+                        android:layout_margin="10sp"
+                        android:contentDescription="@string/logo"
+                        android:layout_centerHorizontal="true"
+                        android:layout_above="@+id/d_day"/>
+                    <TextView
+                        android:id="@+id/d_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="40sp"
+                        android:text="@string/d_day"
+                        android:layout_margin="10sp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enable"
+                        android:textSize="30sp"
+                        android:id="@+id/switchbutton"
+                        android:layout_margin="10sp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/temperatureTextView"
+                        android:onClick="buttonClicked"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/temperatureTextView"
+                        android:text="@string/thermodo_unplugged"
+                        android:textSize="20sp"
+                        android:layout_margin="10sp"
+                        android:gravity="center_horizontal"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/d_day"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/calendar_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@android:color/darker_gray">
+                    <RelativeLayout
+                        android:id="@+id/calendar_title"
+                        android:layout_width="fill_parent"
+                        android:layout_height="100sp">
+                    </RelativeLayout>
+                    <CalendarView
+                        android:id="@+id/calendar"
+                        android:layout_below="@id/calendar_title"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+                    </CalendarView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/graph_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <Spinner
+                        android:id="@+id/spinner1"
+                        android:layout_width="450px"
+                        android:layout_height="50px"
+                        android:background="@android:drawable/btn_dropdown"
+                        android:spinnerMode="dropdown" />
+                    <LinearLayout
+                        android:id="@+id/chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@+id/spinner1"
+                        tools:ignore="Orientation" >
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </FrameLayout>
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"/>
+
+        </LinearLayout>
+
+    </TabHost>
+
+
+</RelativeLayout>
