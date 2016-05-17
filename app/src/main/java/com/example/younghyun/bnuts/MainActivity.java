@@ -117,11 +117,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
         tabHost.setup();
 
         tabHost.addTab(tabHost.newTabSpec("TAB1")
-                .setContent(R.id.main_layout).setIndicator(getString(R.string.main_layout)));
+                .setContent(R.id.main_layout).setIndicator("", getResources().getDrawable(R.drawable.ic_home)));
         tabHost.addTab(tabHost.newTabSpec("TAB2")
-                .setContent(R.id.calendar_layout).setIndicator(getString(R.string.calendar_layout)));
+                .setContent(R.id.calendar_layout).setIndicator("", getResources().getDrawable(R.drawable.ic_calendar)));
         tabHost.addTab(tabHost.newTabSpec("TAB3")
-                .setContent(R.id.graph_layout).setIndicator(getString(R.string.graph_layout)));
+                .setContent(R.id.graph_layout).setIndicator("", getResources().getDrawable(R.drawable.ic_bar_chart)));
         mTemperatureTextView = (TextView) findViewById(R.id.temperatureTextView);
         //ThermodoFactory를 통해서 Thermodo instance를 생성하고 그 값을 받아온다
         //parameter는 Context이므로 Activity를 extends한 자기자신을 파라미터로 전달한다

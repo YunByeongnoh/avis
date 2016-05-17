@@ -29,10 +29,13 @@
                         android:layout_width="180sp"
                         android:layout_height="180sp"
                         android:src="@drawable/avis"
-                        android:layout_margin="10sp"
                         android:contentDescription="@string/logo"
-                        android:layout_centerHorizontal="true"
-                        android:layout_above="@+id/d_day"/>
+                        android:layout_marginTop="10sp"
+                        android:layout_alignRight="@+id/d_day"
+                        android:layout_alignEnd="@+id/d_day"
+                        android:layout_alignLeft="@+id/d_day"
+                        android:layout_alignStart="@+id/d_day"
+                        android:layout_above="@+id/button" />
                     <TextView
                         android:id="@+id/d_day"
                         android:layout_width="wrap_content"
@@ -48,20 +51,49 @@
                         android:text="@string/enable"
                         android:textSize="30sp"
                         android:id="@+id/switchbutton"
-                        android:layout_margin="10sp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@+id/temperatureTextView"
-                        android:onClick="buttonClicked"/>
+                        android:onClick="buttonClicked"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignLeft="@+id/d_day"
+                        android:layout_alignStart="@+id/d_day" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/temperatureTextView"
                         android:text="@string/thermodo_unplugged"
                         android:textSize="20sp"
-                        android:layout_margin="10sp"
                         android:gravity="center_horizontal"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@+id/d_day"/>
+                        android:layout_above="@+id/switchbutton"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="생리일"
+                        android:id="@+id/button"
+                        android:layout_above="@+id/d_day"
+                        android:layout_toLeftOf="@+id/switchbutton"
+                        android:layout_toStartOf="@+id/switchbutton" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="배란일"
+                        android:id="@+id/button2"
+                        android:layout_below="@+id/main_image"
+                        android:layout_alignLeft="@+id/main_image"
+                        android:layout_alignStart="@+id/main_image"
+                        android:layout_alignRight="@+id/main_image"
+                        android:layout_alignEnd="@+id/main_image" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="h"
+                        android:id="@+id/button3"
+                        android:layout_below="@+id/main_image"
+                        android:layout_toRightOf="@+id/main_image"
+                        android:layout_toEndOf="@+id/main_image" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/calendar_layout"
