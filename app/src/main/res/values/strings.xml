@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">B.nuts</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="d_day">D-day</string>
+    <string name="main_layout">MAIN</string>
+    <string name="calendar_layout">CALENDAR</string>
+    <string name="graph_layout">GRAPH</string>
+    <string name="go_today">Today</string>
+    <string name="logo">AVIS</string>
+    <string name="시작">시작</string>
+    <string name="끝">끝</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
+    <string name="thermodo_unplugged">Temperature sensor is unplugged. Plug it in to start measuring.</string>
+    <string name="draw_chart">Draw chart</string>
+
+</resources>
