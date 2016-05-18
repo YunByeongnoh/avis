@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +19,10 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.graphics.Paint.Align;
@@ -26,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.CalendarView.OnDateChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.AlertDialog;
 
 import com.example.younghyun.bnuts.data.DateInformation;
 import com.example.younghyun.bnuts.database.ExecSQL;
@@ -41,9 +47,15 @@ import org.achartengine.renderer.BasicStroke;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.logging.Logger;
+
+import static android.widget.CalendarView.*;
 
 
 public class MainActivity extends Activity implements AdapterView.OnItemSelectedListener, ThermodoListener {
@@ -57,7 +69,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
     private Thermodo mThermodo;
     private TextView mTemperatureTextView;
     private Button button;
-
+    private Dialog dialog;
     private Timer timerThread;
 
     private double average = 0;
@@ -66,14 +78,24 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
 
     private String tempDate;
     public Button btn;
-
+    public GregorianCalendar month, itemmonth;// calendar instances.
+    String selectedGridDate;
+    public CalendarAdapter adapter_cal;// adapter instance
+    public Handler handler;// for grabbing some event values for showing the dot
+    // marker.
+    public ArrayList<String> items_cal; // container to store calendar items which
+    // needs showing the event marker
+    ArrayList<String> event;
+    LinearLayout rLayout;
+    ArrayList<String> date;
+    ArrayList<String> desc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         execSQL = new ExecSQL(this);
-
+        Locale.setDefault(Locale.US); // calendar
         //initGraph();
         // Getting reference to the button btn_chart
 
@@ -84,19 +106,145 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
         dropdown.setOnItemSelectedListener(this);
 
 
+        rLayout = (LinearLayout) findViewById(R.id.text);
+        month = (GregorianCalendar) GregorianCalendar.getInstance();
+        itemmonth = (GregorianCalendar) month.clone();
+
+        items_cal = new ArrayList<String>();
+
+        adapter_cal = new CalendarAdapter(this, month);
+
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+        gridview.setAdapter(adapter_cal);
+
+        handler = new Handler();
+        handler.post(calendarUpdater);
+
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(android.text.format.DateFormat.format("MMMM yyyy", month));
+
+        RelativeLayout previous = (RelativeLayout) findViewById(R.id.previous);
+
+        previous.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                setPreviousMonth();
+                refreshCalendar();
+            }
+        });
+
+        RelativeLayout next = (RelativeLayout) findViewById(R.id.next);
+        next.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                setNextMonth();
+                refreshCalendar();
+
+            }
+        });
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                // removing the previous view if added
+                if (((LinearLayout) rLayout).getChildCount() > 0) {
+                    ((LinearLayout) rLayout).removeAllViews();
+                }
+                desc = new ArrayList<String>();
+                date = new ArrayList<String>();
+                ((CalendarAdapter) parent.getAdapter()).setSelected(v);
+                String selectedGridDate = CalendarAdapter.dayString
+                        .get(position);
+                String[] separatedTime = selectedGridDate.split("-");
+                String gridvalueString = separatedTime[2].replaceFirst("^0*",
+                        "");// taking last part of date. ie; 2 from 2012-12-02.
+                System.err.println("test"+selectedGridDate);
+                int gridvalue = Integer.parseInt(gridvalueString);
+                // navigate to next or previous month on clicking offdays.
+                if ((gridvalue > 10) && (position < 8)) {
+                    setPreviousMonth();
+                    refreshCalendar();
+                } else if ((gridvalue < 7) && (position > 28)) {
+                    setNextMonth();
+                    refreshCalendar();
+                }
+                ((CalendarAdapter) parent.getAdapter()).setSelected(v);
+                dialog = new InputDialog(MainActivity.this);
+                dialog.setTitle(selectedGridDate);
+                //dialog.addContentView();
+
+                //dialog.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+                dialog.setContentView(R.layout.day_record);
+                //dialog.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+
+                dialog.show();
+
+
+
+
+                Button ok = (Button) dialog.findViewById(R.id.saveButton);
+                ok.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button Event = (Button)dialog.findViewById(R.id.EventButton);
+                Event.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intentEventList =
+                                new Intent(getApplicationContext(), EventList.class);
+                        startActivity(intentEventList);
+                        System.err.print("intet");
+                    }
+                });
+                for (int i = 0; i < Utility.startDates.size(); i++) {
+                    if (Utility.startDates.get(i).equals(selectedGridDate)) {
+                        desc.add(Utility.nameOfEvent.get(i));
+                    }
+                }
+
+                if (desc.size() > 0) {
+                    for (int i = 0; i < desc.size(); i++) {
+                        TextView rowTextView = new TextView(MainActivity.this);
+
+                        // set some properties of rowTextView or something
+                        rowTextView.setText("Event:" + desc.get(i));
+                        rowTextView.setTextColor(Color.BLACK);
+
+                        // add the textview to the linearlayout
+                        rLayout.addView(rowTextView);
+
+                    }
+
+                }
+
+                desc = null;
+
+            }
+
+        });
+        /*
         cal = (CalendarView) findViewById(R.id.calendar);
+
         cal.setOnDateChangeListener(new OnDateChangeListener() {
 
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // TODO Auto-generated method stub
-                Dialog dialog = new InputDialog(MainActivity.this);
+                dialog = new InputDialog(MainActivity.this);
                 dialog.setTitle(year + "년 " + (month + 1) + "월 " + dayOfMonth + "일");
                 //dialog.addContentView();
+
                 //dialog.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
                 dialog.setContentView(R.layout.day_record);
                 //dialog.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+
                 dialog.show();
+
                 tempDate = "";
                 tempDate += year + "/";
                 if (month < 10) tempDate += ("0" + (month + 1));
@@ -104,24 +252,45 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
                 tempDate += "/";
                 if (dayOfMonth < 10) tempDate += ("0" + dayOfMonth);
                 else tempDate += dayOfMonth;
+
                 System.err.println("selected date is " + tempDate);
+
+
+                Button ok = (Button) dialog.findViewById(R.id.saveButton);
+                ok.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button Event = (Button)dialog.findViewById(R.id.EventButton);
+                Event.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intentEventList =
+                                new Intent(getApplicationContext(), EventList.class);
+                        startActivity(intentEventList);
+                        System.err.print("intet");
+                    }
+                });
 
 //                Toast.makeText(getBaseContext(), "Selected Date is\n\n"
 //                                + dayOfMonth + " : " + (month + 1) + " : " + year,
 //                        Toast.LENGTH_LONG).show();
+
             }
         });
-
+        */
 
         tabHost = (TabHost) findViewById(android.R.id.tabhost);
         tabHost.setup();
 
         tabHost.addTab(tabHost.newTabSpec("TAB1")
-                .setContent(R.id.main_layout).setIndicator("", getResources().getDrawable(R.drawable.ic_home)));
+                .setContent(R.id.main_layout).setIndicator(getString(R.string.main_layout)));
         tabHost.addTab(tabHost.newTabSpec("TAB2")
-                .setContent(R.id.calendar_layout).setIndicator("", getResources().getDrawable(R.drawable.ic_calendar)));
+                .setContent(R.id.calendar_layout).setIndicator(getString(R.string.calendar_layout)));
         tabHost.addTab(tabHost.newTabSpec("TAB3")
-                .setContent(R.id.graph_layout).setIndicator("", getResources().getDrawable(R.drawable.ic_bar_chart)));
+                .setContent(R.id.graph_layout).setIndicator(getString(R.string.graph_layout)));
         mTemperatureTextView = (TextView) findViewById(R.id.temperatureTextView);
         //ThermodoFactory를 통해서 Thermodo instance를 생성하고 그 값을 받아온다
         //parameter는 Context이므로 Activity를 extends한 자기자신을 파라미터로 전달한다
@@ -131,6 +300,69 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
         button = (Button) findViewById(R.id.switchbutton);
     }
 
+
+
+    protected void setNextMonth() {
+        if (month.get(GregorianCalendar.MONTH) == month
+                .getActualMaximum(GregorianCalendar.MONTH)) {
+            month.set((month.get(GregorianCalendar.YEAR) + 1),
+                    month.getActualMinimum(GregorianCalendar.MONTH), 1);
+        } else {
+            month.set(GregorianCalendar.MONTH,
+                    month.get(GregorianCalendar.MONTH) + 1);
+        }
+
+    }
+
+    protected void setPreviousMonth() {
+        if (month.get(GregorianCalendar.MONTH) == month
+                .getActualMinimum(GregorianCalendar.MONTH)) {
+            month.set((month.get(GregorianCalendar.YEAR) - 1),
+                    month.getActualMaximum(GregorianCalendar.MONTH), 1);
+        } else {
+            month.set(GregorianCalendar.MONTH,
+                    month.get(GregorianCalendar.MONTH) - 1);
+        }
+
+    }
+
+    protected void showToast(String string) {
+        Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void refreshCalendar() {
+        TextView title = (TextView) findViewById(R.id.title);
+
+        adapter_cal.refreshDays();
+        adapter_cal.notifyDataSetChanged();
+        handler.post(calendarUpdater); // generate some calendar items
+
+        title.setText(android.text.format.DateFormat.format("MMMM yyyy", month));
+    }
+
+    public Runnable calendarUpdater = new Runnable() {
+
+        @Override
+        public void run() {
+            items_cal.clear();
+
+            // Print dates of the current week
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            String itemvalue;
+            event = Utility.readCalendarEvent(MainActivity.this);
+            Log.d("=====Event====", event.toString());
+            Log.d("=====Date ARRAY====", Utility.startDates.toString());
+
+            for (int i = 0; i < Utility.startDates.size(); i++) {
+                itemvalue = df.format(itemmonth.getTime());
+                itemmonth.add(GregorianCalendar.DATE, 1);
+                items_cal.add(Utility.startDates.get(i).toString());
+            }
+            adapter_cal.setItems(items_cal);
+            adapter_cal.notifyDataSetChanged();
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -153,6 +385,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
 
         return super.onOptionsItemSelected(item);
     }
+    //여기까지 달력
 
     //thermodo가 꽂힌것이 detect되면 바로 onStartedMeasuring을 실행한다
     @Override
@@ -469,10 +702,12 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
 
             setContentView(R.layout.day_record);
 
-            btn = (Button) findViewById(R.id.saveButton);
-            btn.setOnClickListener(this);
+           // btn = (Button) findViewById(R.id.saveButton);
+            //btn.setOnClickListener(this);
             System.out.println("2222");
-            findViewById(R.id.saveButton).setOnClickListener(okbtnclick);
+            //findViewById(R.id.saveButton).setOnClickListener(okbtnclick);
+
+
 
         }
 
@@ -482,12 +717,16 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
         }
     }
 
+
+
     public Button.OnClickListener okbtnclick =
             new Button.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    System.out.println("testtest1111111");
+                    if (v == btn){
+                        dialog.dismiss();
+                    }
 
                 }
             };

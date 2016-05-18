@@ -114,6 +114,15 @@
             android:id="@+id/saveButton"
             android:layout_marginLeft="247dp"
             android:layout_marginStart="247dp" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event"
+            android:id="@+id/EventButton"
+            android:layout_marginLeft="247dp"
+            android:layout_marginStart="247dp" />
+
+
     </TableLayout>
 
 
