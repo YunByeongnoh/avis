@@ -121,6 +121,7 @@ public class CalendarAdapter extends BaseAdapter {
 
 		// create date string for comparison
 		String date = dayString.get(position);
+		//System.out.println("date : " + date+"// item : " + items+ "아이템 포함"+ items.contains(date));
 
 		if (date.length() == 1) {
 			date = "0" + date;

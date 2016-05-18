@@ -45,6 +45,7 @@ public class Utility {
             cursor.moveToNext();
 
         }
+        System.out.println("event : " + nameOfEvent +"//startDate" + startDates + "// end date:" + endDates +"//descrp" + descriptions);
         return nameOfEvent;
     }
 
